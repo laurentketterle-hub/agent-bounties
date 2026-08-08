@@ -758,13 +758,13 @@ def patch_docs() -> None:
         "docs/standing-meta-v4-fair-earning.md",
         """6. posts the parent bond and activates the parent claim.
 
-After VRF fulfillment,
+After VRF fulfillment, ranking derivation and assignment activation are permissionless and may happen immediately. The selected solver may claim immediately. A nonresponsive solver may be replaced by the next wallet in the same ranking after ten minutes, without a reroll. Primary verdicts and appeal votes may be submitted immediately. The eligible appellant may waive an undisputed appeal window, and three matching appellate votes form an immediately finalizable majority.
 """,
         """6. posts the parent bond and activates the parent claim.
 
 The caller supplies zero for the typed selection timestamp and commitment. The parent factory derives both from the actual inclusion block and frozen candidate set, so a signed transaction never has to predict a miner-selected timestamp.
 
-After VRF fulfillment,
+After VRF fulfillment, ranking derivation and assignment activation are permissionless and may happen immediately. The selected solver may claim immediately. A nonresponsive solver may be replaced by the next wallet in the same ranking after ten minutes, without a reroll. Primary verdicts and appeal votes may be submitted immediately. The eligible appellant may waive an undisputed appeal window, and three matching appellate votes form an immediately finalizable majority.
 """,
     )
     replace_once(
