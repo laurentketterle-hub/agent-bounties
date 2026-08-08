@@ -478,9 +478,9 @@ def run(command: Sequence[str], *, cwd: Path, timeout: int = 300) -> str:
     )
     replace_once(
         path,
-        """            f"command failed ({completed.returncode}): {redacted_command(command)}\n{completed.stdout[-6000:]}"
+        """            f"command failed ({completed.returncode}): {redacted_command(command)}\\n{completed.stdout[-6000:]}"
 """,
-        """            f"command failed ({completed.returncode}): {redacted_command(command)}\n"
+        """            f"command failed ({completed.returncode}): {redacted_command(command)}\\n"
             f"{redacted_output(completed.stdout, command)[-6000:]}"
 """,
     )
