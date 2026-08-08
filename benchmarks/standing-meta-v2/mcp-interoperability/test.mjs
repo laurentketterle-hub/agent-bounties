@@ -12,7 +12,7 @@ if (!existsSync(checker)) {
   process.exit(1);
 }
 
-const ready = {"ready": true, "schema": "https://agentbounties.org/schemas/mcp-interop-manifest.v2.json", "network": "base-mainnet", "chain_id": 8453, "asset": "USDC", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "deployment_status": "active", "api_base": "https://api.agentbounties.app", "supported_transports": ["stdio", "sse", "streamable-http"], "mcp_version": "2024-11-05", "required_tools": ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]};
+const ready = {"ready": true, "schema": "https://agentbounties.org/schemas/mcp-interop-manifest.v2.json", "network": "base-mainnet", "chain_id": 8453, "asset": "USDC", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "deployment_status": "active", "api_base": "https://api.agentbounties.app", "supported_transports": ["stdio", "streamable-http"], "mcp_version": "2026-07-28", "required_tools": ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]};
 
 const invalidProtocolErrors = ["schema_mismatch", "protocol_network_mismatch", "protocol_chain_id_mismatch", "protocol_asset_mismatch", "protocol_token_mismatch", "protocol_deployment_status_mismatch", "protocol_api_base_mismatch", "protocol_supported_transports_mismatch", "protocol_mcp_version_mismatch", "protocol_required_tools_mismatch"];
 
@@ -45,7 +45,7 @@ const cases = [
     name: "missing required field",
     args: [join(benchmarkRoot, "fixtures", "missing-field.json")],
     status: 1,
-    output: { ready: false, errors: invalidProtocolErrors.slice(0, 1) },
+    output: { ready: false, errors: invalidProtocolErrors },
   },
   {
     name: "wrong protocol",
