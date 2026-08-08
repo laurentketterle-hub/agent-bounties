@@ -24,6 +24,13 @@ function run(root) {
   });
 }
 
+// ArraysEqual compares two arrays structurally, avoiding JSON.stringify spacing issues.
+function arraysEqual(a, b) {
+  if (!Array.isArray(a) || !Array.isArray(b)) return false;
+  if (a.length !== b.length) return false;
+  return a.every((v, i) => v === b[i]);
+}
+
 const knownGood = `import { readFileSync } from "node:fs";
 const fail = (status, error) => { console.log(JSON.stringify({ready:false,errors:[error]})); process.exit(status); };
 if (process.argv.length !== 3) fail(2, "manifest_path_required");
@@ -40,13 +47,15 @@ if (manifest.asset !== "USDC") errors.push("protocol_asset_mismatch");
 if (String(manifest.token || "").toLowerCase() !== "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913") errors.push("protocol_token_mismatch");
 if (manifest.deployment_status !== "active") errors.push("protocol_deployment_status_mismatch");
 if (manifest.api_base !== "https://api.agentbounties.app") errors.push("protocol_api_base_mismatch");
-if (JSON.stringify(manifest.supported_transports) !== '["stdio", "sse", "streamable-http"]') errors.push("protocol_supported_transports_mismatch");
-if (manifest.mcp_version !== "2024-11-05") errors.push("protocol_mcp_version_mismatch");
-if (JSON.stringify(manifest.required_tools) !== '["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]') errors.push("protocol_required_tools_mismatch");
+const expectedTransports = ["stdio", "streamable-http"];
+if (!Array.isArray(manifest.supported_transports) || manifest.supported_transports.length !== expectedTransports.length || !manifest.supported_transports.every((t, i) => t === expectedTransports[i])) errors.push("protocol_supported_transports_mismatch");
+if (manifest.mcp_version !== "2026-07-28") errors.push("protocol_mcp_version_mismatch");
+const expectedTools = ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"];
+if (!Array.isArray(manifest.required_tools) || manifest.required_tools.length !== expectedTools.length || !manifest.required_tools.every((t, i) => t === expectedTools[i])) errors.push("protocol_required_tools_mismatch");
 if (errors.length > 0) { console.log(JSON.stringify({ready:false,errors})); process.exit(1); }
-console.log(JSON.stringify({"ready": true, "schema": "https://agentbounties.org/schemas/mcp-interop-manifest.v2.json", "network": "base-mainnet", "chain_id": 8453, "asset": "USDC", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "deployment_status": "active", "api_base": "https://api.agentbounties.app", "supported_transports": ["stdio", "sse", "streamable-http"], "mcp_version": "2024-11-05", "required_tools": ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]}));`;
+console.log(JSON.stringify({"ready": true, "schema": "https://agentbounties.org/schemas/mcp-interop-manifest.v2.json", "network": "base-mainnet", "chain_id": 8453, "asset": "USDC", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "deployment_status": "active", "api_base": "https://api.agentbounties.app", "supported_transports": ["stdio", "streamable-http"], "mcp_version": "2026-07-28", "required_tools": ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]}));`;
 
-const alwaysReady = `console.log(JSON.stringify({"ready": true, "schema": "https://agentbounties.org/schemas/mcp-interop-manifest.v2.json", "network": "base-mainnet", "chain_id": 8453, "asset": "USDC", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "deployment_status": "active", "api_base": "https://api.agentbounties.app", "supported_transports": ["stdio", "sse", "streamable-http"], "mcp_version": "2024-11-05", "required_tools": ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]}));`;
+const alwaysReady = `console.log(JSON.stringify({"ready": true, "schema": "https://agentbounties.org/schemas/mcp-interop-manifest.v2.json", "network": "base-mainnet", "chain_id": 8453, "asset": "USDC", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "deployment_status": "active", "api_base": "https://api.agentbounties.app", "supported_transports": ["stdio", "streamable-http"], "mcp_version": "2026-07-28", "required_tools": ["bounty_search", "bounty_claim", "wallet_status", "settlement_verify"]}));`;
 
 try {
   const good = run(source("known-good", knownGood));
