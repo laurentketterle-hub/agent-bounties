@@ -6,7 +6,6 @@ use utoipa::ToSchema;
 use uuid::Uuid;
 
 pub mod objective;
-pub mod direct_bounty;
 pub mod claim_readiness;
 pub use objective::*;
 mod leaderboard;
