@@ -1,5 +1,45 @@
 [
   {
+    "scenario": "healthy-direct",
+    "reward": "5000000",
+    "refundable_bond": "10000",
+    "external_spend": "0",
+    "gross_cash_margin": "4990000",
+    "is_guaranteed_net_profit": false,
+    "next_action": "sign_claim_transaction",
+    "blocker": null
+  },
+  {
+    "scenario": "recovery-reserved",
+    "reward": "2000000",
+    "refundable_bond": "10000",
+    "external_spend": "0",
+    "gross_cash_margin": "-10000",
+    "is_guaranteed_net_profit": false,
+    "next_action": "abort_claim",
+    "blocker": "Recovery-reserved: bond exceeds available cash margin"
+  },
+  {
+    "scenario": "unprofitable",
+    "reward": "5000",
+    "refundable_bond": "10000",
+    "external_spend": "2000",
+    "gross_cash_margin": "-7000",
+    "is_guaranteed_net_profit": false,
+    "next_action": "abort_claim",
+    "blocker": "Unprofitable: reward does not cover bond and external spend"
+  },
+  {
+    "scenario": "non-creator-failure",
+    "reward": "2000000",
+    "refundable_bond": "10000",
+    "external_spend": "0",
+    "gross_cash_margin": "1990000",
+    "is_guaranteed_net_profit": false,
+    "next_action": "abort_claim",
+    "blocker": "Non-creator: claim must be submitted by the bounty creator"
+  },
+  {
     "scenario": "ready-to-earn",
     "reward": "2000000",
     "refundable_bond": "10000",

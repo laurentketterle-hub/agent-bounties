@@ -51,12 +51,32 @@ mod tests {
         let diagnostics: Vec<ClaimReadinessDiagnostic> = serde_json::from_str(FIXTURE_JSON)
             .expect("Fixture must be valid JSON");
             
-        assert_eq!(diagnostics.len(), 4, "Fixture must cover 4 specific scenarios");
+        assert_eq!(diagnostics.len(), 8, "Fixture must cover 8 specific scenarios");
         
-        let healthy = diagnostics.iter().find(|d| d.scenario == "ready-to-earn").unwrap();
-        assert_eq!(healthy.next_action, "sign_claim_transaction");
-        assert!(healthy.blocker.is_none());
-        assert!(healthy.validate().is_ok());
+        let healthy_direct = diagnostics.iter().find(|d| d.scenario == "healthy-direct").unwrap();
+        assert_eq!(healthy_direct.next_action, "sign_claim_transaction");
+        assert!(healthy_direct.blocker.is_none());
+        assert!(healthy_direct.validate().is_ok());
+
+        let recovery_reserved = diagnostics.iter().find(|d| d.scenario == "recovery-reserved").unwrap();
+        assert_eq!(recovery_reserved.next_action, "abort_claim");
+        assert!(recovery_reserved.blocker.as_ref().unwrap().contains("Recovery"));
+        assert!(recovery_reserved.validate().is_ok());
+
+        let unprofitable = diagnostics.iter().find(|d| d.scenario == "unprofitable").unwrap();
+        assert_eq!(unprofitable.next_action, "abort_claim");
+        assert!(unprofitable.blocker.as_ref().unwrap().contains("Unprofitable"));
+        assert!(unprofitable.validate().is_ok());
+
+        let non_creator = diagnostics.iter().find(|d| d.scenario == "non-creator-failure").unwrap();
+        assert_eq!(non_creator.next_action, "abort_claim");
+        assert!(non_creator.blocker.as_ref().unwrap().contains("Non-creator"));
+        assert!(non_creator.validate().is_ok());
+
+        let ready = diagnostics.iter().find(|d| d.scenario == "ready-to-earn").unwrap();
+        assert_eq!(ready.next_action, "sign_claim_transaction");
+        assert!(ready.blocker.is_none());
+        assert!(ready.validate().is_ok());
 
         let stale = diagnostics.iter().find(|d| d.scenario == "stale").unwrap();
         assert_eq!(stale.next_action, "abort_claim");
